@@ -7,6 +7,8 @@ module Devise
 
       included do
         include Devise::Controllers::ScopedViews
+        
+        layout 'mailer' rescue true
       end
 
       protected
@@ -35,7 +37,7 @@ module Devise
           from: mailer_sender(devise_mapping),
           reply_to: mailer_reply_to(devise_mapping),
           template_path: template_paths,
-          template_name: action
+          template_name: action,
         }.merge(opts)
 
         @email = headers[:to]
@@ -85,8 +87,9 @@ module Devise
       #           subject: '...'
       #
       def subject_for(key)
-        I18n.t(:"#{devise_mapping.name}_subject", scope: [:devise, :mailer, key],
-          default: [:subject, key.to_s.humanize])
+        #I18n.t(:"#{devise_mapping.name}_subject", scope: [:devise, :mailer, key],
+          #default: [:subject, key.to_s.humanize])
+        I18n.t(:"#{key}_subject")
       end
     end
   end
